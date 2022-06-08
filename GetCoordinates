@@ -1,0 +1,71 @@
+# Library Imports
+import json
+import urllib
+import pandas as pandas
+import requests
+import os.path
+from tqdm import tqdm
+from tabulate import tabulate
+
+# API URL from Bing Maps
+api_url = f'http://dev.virtualearth.net/REST/v1/Locations?'
+api_key = 'API Key'
+
+
+
+# Reading excel file into dataframes
+df = pandas.read_excel(r'C:\Users\sganesh\Documents\Properties\.xlsx', 'Sheet_Name')
+
+# Function declaration to get geopoints for the locations in excel file
+def getGeoPoints(data_row):
+    value = data_row[['City', 'Postal Code', 'Country', 'Street Address', 'State/Province/District']].isnull().values.any()
+    if value:
+        return data_row['ID'],"NA"
+
+    else:
+        try:
+            # Integration with the BingMaps API
+            locality = data_row['City']
+            postalCode = data_row['Postal Code']
+            countryRegion = data_row['Country']
+            addressLine = data_row['Street Address']
+            adminDistrict = data_row['State/Province/District']
+            # Parameters to be passed into the base URL
+            parameters = {"countryRegion": countryRegion,
+                          "adminDistrict": adminDistrict,
+                          "locality": locality,
+                          "postalCode": postalCode,
+                          "addressLine": addressLine,
+                          "key": api_key
+                          }
+
+            #API URL with variables embedded
+            response = requests.get(f"{api_url}{urllib.parse.urlencode(parameters)}")
+            api_data = json.loads(response.content)
+
+            # Storing Coordinates from the API response
+            geoPoints = api_data.get("resourceSets")[0].get("resources")[0].get("point").get("coordinates")
+
+            print(data_row['ID'],geoPoints)
+            return data_row['ID'],geoPoints
+
+        except:
+            # print("bye")
+            return 'NA'
+
+
+# Function Call to getGeoPoints
+
+x = []
+
+for index, row in tqdm(df.iterrows()):
+    x.append(getGeoPoints(row))
+
+df_geoPoints = pandas.DataFrame(x)
+df_geoPoints.to_excel("output.xlsx")
+
+# Saving the file in a directory other than the existing one
+currentDir = os.getcwd()
+# print(currentDir)
+directory = "Directory Name"
+path = os.path.join(currentDir,directory)
