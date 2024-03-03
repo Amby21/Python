@@ -14,7 +14,7 @@ api_key = 'API Key'
 
 
 # Reading excel file into dataframes
-df = pandas.read_excel(r'C:\Users\sganesh\Documents\Properties\.xlsx', 'Sheet_Name')
+df = pandas.read_excel(r'filepath', 'Sheet_Name')
 
 # Function declaration to get geopoints for the locations in excel file
 def getGeoPoints(data_row):
