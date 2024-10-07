@@ -1,0 +1,40 @@
+if __name__ == '__main__':
+    totlst=[]
+    names=[]
+    scores=[]
+    student = []
+    n = 0
+    for _ in range(int(input())):
+        name = input()
+        score = float(input())
+        names.append(name)
+        scores.append(score)
+        n +=1
+    
+    dic = dict(zip(names,scores))
+    # print(dic)
+    sorted_dic = dict(sorted(dic.items(), key=lambda kv:(kv[1], kv[0])))
+    min_value = min(sorted_dic.values())
+    
+    result=[]
+    for i in sorted_dic.values():
+        if (i>min_value):
+            # result.append(sorted_dic.key[i])
+            # break
+            for j in sorted_dic.values():
+                if (j == i):
+                    result.append(j)
+            break
+    
+    sorted_dic = dict(sorted(dic.items(), key=lambda kv:(kv[0], kv[1])))  
+    g=[]
+    
+    for k, v in (sorted_dic.items()):
+        count = 0
+        for i in result:
+            if(i==v and count == 0):
+                print(k)
+                count+=1
+
+                 
+                    
