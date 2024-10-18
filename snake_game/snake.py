@@ -48,8 +48,7 @@ class Snake(Turtle):
     def right(self):
         if self.head.heading() != LEFT:
             self.head.setheading(RIGHT)       
-
-<<<<<<< HEAD
+ 
     def reset(self):
         for turtle in self.turtles:
             turtle.goto(1000,1000)    
@@ -58,8 +57,3 @@ class Snake(Turtle):
         self.head = self.turtles[0]
         
     
-
-=======
->>>>>>> 62bcf6f72043afa7fd97b491578ba20565b4cad9
-    
-    # self.turtles[0].left(90) 
